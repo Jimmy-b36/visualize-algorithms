@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
+
 let data: number[] = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
   23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
   42, 43, 44, 45, 46, 47, 48, 49, 50,
 ];
 const Test = () => {
-  const [array, setArray] = useState<number[]>();
+  const [array, setArray] = useState<number[]>([]);
   const [clicked, setClicked] = useState<boolean>();
+  const [currentValue, setCurrentValue] = useState<number>(0);
   const [steps, setSteps] = useState<number>(0);
 
   const selectionSort = (arr: number[]) => {
@@ -14,34 +16,34 @@ const Test = () => {
 
     const x: NodeJS.Timer = setInterval((i: number = arr.length) => {
       if (i === 0) return clearInterval(x);
-      result.push(Math.min(...arr));
-      arr.splice(arr.indexOf(Math.min(...arr)), 1);
+      let min = Math.min(...arr);
+      setCurrentValue(min);
+      result.push(min);
+      arr.splice(arr.indexOf(min), 1);
       setArray([...array.concat(result)]);
       i--;
-    }, 100);
-
-    return result;
+    }, 200);
+    return;
   };
 
-  const bubbleSort = (arr: number[]) => {
+  const bubbleSort = async (arr: number[]) => {
     arr = shuffleArray(arr);
-    const x: NodeJS.Timer = setInterval((i = 0) => {
+    const x: NodeJS.Timer = await setInterval((i = 0) => {
       if (i >= arr.length) return clearInterval(x);
       for (let j = 0; j < arr.length; j++) {
+        setCurrentValue(arr[i]);
         if (arr[j] > arr[j + 1]) {
           let tmp = arr[j];
           arr[j] = arr[j + 1];
           arr[j + 1] = tmp;
           let newArr = arr;
           setArray([...newArr]);
-          let newSteps = steps;
-          newSteps += i * j;
-          setSteps(newSteps);
-        } else i++;
+        }
+        i++;
       }
-    }, 100);
-
-    return arr;
+    }, 200);
+    console.log('finished');
+    return;
   };
 
   const shuffleArray = (array: number[]) => {
@@ -56,8 +58,10 @@ const Test = () => {
   };
   useEffect(() => {
     let shuffled = array && shuffleArray(array);
+    setCurrentValue(0);
     setSteps(0);
     setArray(shuffled);
+    console.log(currentValue);
   }, [clicked]);
 
   useEffect(() => {
@@ -65,9 +69,20 @@ const Test = () => {
   }, []);
 
   return (
-    <div className="flex flex-row items-end w-full">
+    <div className="flex flex-row items-end w-full transition duration-100 ease-in">
       {array?.map(element => (
-        <div key={element} className={`w-6 h-[${element * 10}px] bg-slate-300`}>
+        <div
+          key={element}
+          className={
+            element === currentValue
+              ? `w-6 h-[${
+                  element * 10
+                }px] bg-red-600 transition duration-100 ease-in`
+              : `w-6 h-[${
+                  element * 10
+                }px] bg-slate-300 transition duration-100 ease-in`
+          }
+        >
           {element}
         </div>
       ))}
