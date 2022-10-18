@@ -2,28 +2,33 @@ import { useEffect, useState } from 'react';
 
 let data: number[] = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
-  42, 43, 44, 45, 46, 47, 48, 49, 50,
+  23, 24, 25,
 ];
 const Test = () => {
   const [array, setArray] = useState<number[]>([]);
-  const [clicked, setClicked] = useState<boolean>();
+  const [reset, setReset] = useState<boolean>(false);
   const [currentValue, setCurrentValue] = useState<number>(0);
-  const [steps, setSteps] = useState<number>(0);
+  const [testValue, setTestValue] = useState<number>(0);
 
   const selectionSort = (arr: number[]) => {
-    const result: number[] = [];
+    for (let i = 0; i < arr.length - 1; i++) {
+      let minIdx = i;
+      for (let j = i + 1; j < arr.length; j++) {
+        console.log('testValue -> ', arr[j]);
+        console.log('currentValue ->', arr[minIdx]);
+        if (arr[j] < arr[minIdx]) {
+          minIdx = j;
+        }
+      }
+      setTimeout(() => {
+        let tmp = arr[minIdx];
+        arr[minIdx] = arr[i];
+        arr[i] = tmp;
+        setArray([...arr]);
+      }, 100);
+    }
 
-    const x: NodeJS.Timer = setInterval((i: number = arr.length) => {
-      if (i === 0) return clearInterval(x);
-      let min = Math.min(...arr);
-      setCurrentValue(min);
-      result.push(min);
-      arr.splice(arr.indexOf(min), 1);
-      setArray([...array.concat(result)]);
-      i--;
-    }, 200);
-    return;
+    return arr;
   };
 
   const bubbleSort = async (arr: number[]) => {
@@ -59,17 +64,17 @@ const Test = () => {
   useEffect(() => {
     let shuffled = array && shuffleArray(array);
     setCurrentValue(0);
-    setSteps(0);
+
     setArray(shuffled);
     console.log(currentValue);
-  }, [clicked]);
+  }, [reset]);
 
   useEffect(() => {
     setArray(shuffleArray(data));
   }, []);
 
   return (
-    <div className="flex flex-row items-end w-full transition duration-100 ease-in">
+    <div className="flex flex-row items-end w-full">
       {array?.map(element => (
         <div
           key={element}
@@ -77,10 +82,14 @@ const Test = () => {
             element === currentValue
               ? `w-6 h-[${
                   element * 10
-                }px] bg-red-600 transition duration-100 ease-in`
+                }px] bg-red-300 transition duration-500 ease-in`
+              : element === testValue
+              ? `w-6 h-[${
+                  element * 10
+                }px] bg-red-300 transition duration-500 ease-in`
               : `w-6 h-[${
                   element * 10
-                }px] bg-slate-300 transition duration-100 ease-in`
+                }px] bg-slate-300 transition duration-500 ease-in`
           }
         >
           {element}
@@ -103,14 +112,13 @@ const Test = () => {
         </span>
       </button>
       <button
-        onClick={() => setClicked(clicked ? false : true)}
+        onClick={() => setReset(reset ? false : true)}
         className="inline-block rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
       >
         <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           reset
         </span>
       </button>
-      <div>{steps}</div>
     </div>
   );
 };
