@@ -1,47 +1,54 @@
 import { useEffect, useState } from 'react';
+
 let data: number[] = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
-  42, 43, 44, 45, 46, 47, 48, 49, 50,
+  23, 24, 25,
 ];
 const Test = () => {
-  const [array, setArray] = useState<number[]>();
-  const [clicked, setClicked] = useState<boolean>();
-  const [steps, setSteps] = useState<number>(0);
+  const [array, setArray] = useState<number[]>([]);
+  const [reset, setReset] = useState<boolean>(false);
+  const [currentValue, setCurrentValue] = useState<number>(0);
+  const [testValue, setTestValue] = useState<number>(0);
 
   const selectionSort = (arr: number[]) => {
-    const result: number[] = [];
+    for (let i = 0; i < arr.length - 1; i++) {
+      let minIdx = i;
+      for (let j = i + 1; j < arr.length; j++) {
+        console.log('testValue -> ', arr[j]);
+        console.log('currentValue ->', arr[minIdx]);
+        if (arr[j] < arr[minIdx]) {
+          minIdx = j;
+        }
+      }
+      setTimeout(() => {
+        let tmp = arr[minIdx];
+        arr[minIdx] = arr[i];
+        arr[i] = tmp;
+        setArray([...arr]);
+      }, 100);
+    }
 
-    const x: NodeJS.Timer = setInterval((i: number = arr.length) => {
-      if (i === 0) return clearInterval(x);
-      result.push(Math.min(...arr));
-      arr.splice(arr.indexOf(Math.min(...arr)), 1);
-      setArray([...array.concat(result)]);
-      i--;
-    }, 100);
-
-    return result;
+    return arr;
   };
 
-  const bubbleSort = (arr: number[]) => {
+  const bubbleSort = async (arr: number[]) => {
     arr = shuffleArray(arr);
-    const x: NodeJS.Timer = setInterval((i = 0) => {
+    const x: NodeJS.Timer = await setInterval((i = 0) => {
       if (i >= arr.length) return clearInterval(x);
       for (let j = 0; j < arr.length; j++) {
+        setCurrentValue(arr[i]);
         if (arr[j] > arr[j + 1]) {
           let tmp = arr[j];
           arr[j] = arr[j + 1];
           arr[j + 1] = tmp;
           let newArr = arr;
           setArray([...newArr]);
-          let newSteps = steps;
-          newSteps += i * j;
-          setSteps(newSteps);
-        } else i++;
+        }
+        i++;
       }
-    }, 100);
-
-    return arr;
+    }, 200);
+    console.log('finished');
+    return;
   };
 
   const shuffleArray = (array: number[]) => {
@@ -56,9 +63,11 @@ const Test = () => {
   };
   useEffect(() => {
     let shuffled = array && shuffleArray(array);
-    setSteps(0);
+    setCurrentValue(0);
+
     setArray(shuffled);
-  }, [clicked]);
+    console.log(currentValue);
+  }, [reset]);
 
   useEffect(() => {
     setArray(shuffleArray(data));
@@ -67,7 +76,22 @@ const Test = () => {
   return (
     <div className="flex flex-row items-end w-full">
       {array?.map(element => (
-        <div key={element} className={`w-6 h-[${element * 10}px] bg-slate-300`}>
+        <div
+          key={element}
+          className={
+            element === currentValue
+              ? `w-6 h-[${
+                  element * 10
+                }px] bg-red-300 transition duration-500 ease-in`
+              : element === testValue
+              ? `w-6 h-[${
+                  element * 10
+                }px] bg-red-300 transition duration-500 ease-in`
+              : `w-6 h-[${
+                  element * 10
+                }px] bg-slate-300 transition duration-500 ease-in`
+          }
+        >
           {element}
         </div>
       ))}
@@ -88,14 +112,13 @@ const Test = () => {
         </span>
       </button>
       <button
-        onClick={() => setClicked(clicked ? false : true)}
+        onClick={() => setReset(reset ? false : true)}
         className="inline-block rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
       >
         <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           reset
         </span>
       </button>
-      <div>{steps}</div>
     </div>
   );
 };
