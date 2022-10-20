@@ -1,28 +1,28 @@
-const mergeSort = (arr1: number[], arr2: number[]) => {
-  let i = 0;
-  let j = 0;
-  const result = [];
-  while (i < arr1.length && j < arr2.length) {
-    if (arr1[i] === arr2[j]) {
-      result.push(arr1[i]);
-      result.push(arr2[j]);
-      j++;
-      i++;
-    }
-    if (arr1[i] > arr2[j]) {
-      result.push(arr2[j]);
-      j++;
-    } else {
-      result.push(arr1[i]);
-      i++;
-    }
-  }
-  i === arr1.length ? result.push(arr2.splice(j)) : result.push(arr1.splice(i));
-
-  return result.flat();
+const mergeSort = (arr: number[]) => {
+  const newArr: number[] = [...arr];
+  if (newArr.length === 1) return newArr;
+  const mid = Math.floor(newArr.length / 2);
+  const leftArr: number[] = mergeSort(newArr.slice(0, mid));
+  const rightArr: number[] = mergeSort(newArr.slice(mid));
+  return merge(leftArr, rightArr);
 };
 
-// console.log(mergeSort([2, 4, 5, 7, 10, 18, 30], [1, 3, 6, 8, 11, 12]));
+const merge = (leftArr: number[], rightArr: number[]) => {
+  const sortedArr: number[] = [];
+
+  let i = 0;
+  let j = 0;
+  while (i < leftArr.length && j < rightArr.length) {
+    if (leftArr[i] < rightArr[j]) {
+      sortedArr.push(leftArr[i++]);
+    } else {
+      sortedArr.push(rightArr[j++]);
+    }
+  }
+  while (i < leftArr.length) sortedArr.push(leftArr[i++]);
+  while (j < rightArr.length) sortedArr.push(rightArr[j++]);
+  return sortedArr;
+};
 
 const selectionSort = (arr: number[]) => {
   for (let i = 0; i < arr.length - 1; i++) {
@@ -65,8 +65,8 @@ const shuffleArray = (arr: number[]) => {
   return arr;
 };
 
-const data = [4, 8, 2, 9, 11, 12, 15, 42, 100];
+const data = [1, 3, 6, 8, 11, 2, 5, 10];
 
-// console.log('selectionSort -> ', selectionSort(data));
+// console.log('mergeSort -> ', mergeSort(data));
 
 export { mergeSort, selectionSort, bubbleSort };
