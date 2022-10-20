@@ -1,6 +1,6 @@
-const mergeSort = require('../helpers/sorting').mergeSort;
-const selectionSort = require('../helpers/sorting').selectionSort;
-const bubbleSort = require('../helpers/sorting').bubbleSort;
+const mergeSort = require('../helpers/sortingAlgorithms').mergeSort;
+const selectionSort = require('../helpers/sortingAlgorithms').selectionSort;
+const bubbleSort = require('../helpers/sortingAlgorithms').bubbleSort;
 
 const data: number[][] = [];
 for (let i = 0; i < 10; i++) {
