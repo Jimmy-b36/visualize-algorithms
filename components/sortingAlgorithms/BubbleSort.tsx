@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 const BubbleSort = (props: {
   primaryArray: number[];
   setPrimaryArray: Dispatch<SetStateAction<number[]>>;
+  setIsSorting: Dispatch<SetStateAction<boolean>>;
 }) => {
   //bubbleSort
   const bubbleSort = async (arr: number[]) => {
@@ -17,16 +18,15 @@ const BubbleSort = (props: {
             if (newArr[j] > newArr[j + 1]) {
               //swap values as we go through the array
               let tmp = newArr[j];
-              setTimeout(() => {}, j * 75);
               newArr[j] = newArr[j + 1];
               newArr[j + 1] = tmp;
               let setArr = [...newArr];
               setTimeout(() => {
                 props.setPrimaryArray(setArr);
-              }, j * 75);
+              }, j * 10);
             }
           }
-        }, i * 1500);
+        }, i * 1000);
       }
     }, 500);
     return;

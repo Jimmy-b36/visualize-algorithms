@@ -7,12 +7,13 @@ import MergeSort from '../components/sortingAlgorithms/MergeSort';
 const Home: NextPage = () => {
   const [primaryArray, setPrimaryArray] = useState<number[]>([]);
   const [reset, setReset] = useState<boolean>(false);
+  const [isSorting, setIsSorting] = useState<boolean>(false);
 
   // generate new array function
   const generateArray = () => {
     const generatedArray: number[] = Array.from(
-      { length: Math.floor(Math.random() * 40) },
-      () => Math.floor(Math.random() * 40 + 1)
+      { length: Math.floor(Math.random() * 50 + 50) },
+      () => Math.floor(Math.random() * 500 + 1)
     );
     return generatedArray;
   };
@@ -40,44 +41,51 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-row items-end w-full">
-      {primaryArray?.map((element: number) => (
-        <div
-          key={Math.random() * 100}
-          className={`w-10 m-1 text-center h-[${element * 10}px] bg-slate-300 `}
-        >
-          {element}
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-row items-end justify-center p-3 m-2 border-2 border-black h-[550px]">
+        {primaryArray?.map((element: number) => (
+          <div
+            key={Math.random() * 100}
+            className={`w-2 m-1 text-center bg-slate-300 `}
+            style={{ height: `${element}px` }}
+          ></div>
+        ))}
+      </div>
+      <div className="flex flex-row">
+        <div className="flex flex-row pr-2 mr-2 border-r-2 border-black">
+          <button
+            onClick={() => setPrimaryArray(generateArray)}
+            className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+          >
+            <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
+              Generate array
+            </span>
+          </button>
+          <button
+            onClick={() => setReset(reset ? false : true)}
+            className="inline-block rounded-full bg-gradient-to-r  from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+          >
+            <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
+              randomize
+            </span>
+          </button>
         </div>
-      ))}
-
-      <button
-        onClick={() => setPrimaryArray(generateArray)}
-        className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
-      >
-        <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
-          Generate array
-        </span>
-      </button>
-      <button
-        onClick={() => setReset(reset ? false : true)}
-        className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
-      >
-        <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
-          reset
-        </span>
-      </button>
-      <SelectionSort
-        setPrimaryArray={setPrimaryArray}
-        primaryArray={primaryArray}
-      />
-      <BubbleSort
-        setPrimaryArray={setPrimaryArray}
-        primaryArray={primaryArray}
-      />
-      <MergeSort
-        setPrimaryArray={setPrimaryArray}
-        primaryArray={primaryArray}
-      />
+        <SelectionSort
+          setPrimaryArray={setPrimaryArray}
+          primaryArray={primaryArray}
+          setIsSorting={setIsSorting}
+        />
+        <BubbleSort
+          setPrimaryArray={setPrimaryArray}
+          primaryArray={primaryArray}
+          setIsSorting={setIsSorting}
+        />
+        <MergeSort
+          setPrimaryArray={setPrimaryArray}
+          primaryArray={primaryArray}
+          setIsSorting={setIsSorting}
+        />
+      </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 const MergeSort = (props: {
   primaryArray: number[];
   setPrimaryArray: Dispatch<SetStateAction<number[]>>;
+  setIsSorting: Dispatch<SetStateAction<boolean>>;
 }) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {

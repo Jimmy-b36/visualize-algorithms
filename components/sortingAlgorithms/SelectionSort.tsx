@@ -3,9 +3,12 @@ import { Dispatch, SetStateAction } from 'react';
 const SelectionSort = (props: {
   primaryArray: number[];
   setPrimaryArray: Dispatch<SetStateAction<number[]>>;
+  setIsSorting: Dispatch<SetStateAction<boolean>>;
 }) => {
   // selectionSort
   const selectionSort = (arr: number[]) => {
+    props.setIsSorting(true);
+
     setTimeout(() => {
       let newArr = [...arr];
       // outer loop through array
@@ -22,7 +25,7 @@ const SelectionSort = (props: {
               // setting our primary array to display each step
               setTimeout(() => {
                 props.setPrimaryArray([...newStep]);
-              }, j * 100);
+              }, j * 10);
             }
           }
         }, i * 1000);
