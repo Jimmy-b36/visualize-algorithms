@@ -1,9 +1,11 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 const MergeSort = (props: {
   primaryArray: number[];
   setPrimaryArray: Dispatch<SetStateAction<number[]>>;
   setIsSorting: Dispatch<SetStateAction<boolean>>;
+  setCurrentIndex: Dispatch<SetStateAction<number[]>>;
+  setTestIndex: Dispatch<SetStateAction<number[]>>;
 }) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -20,18 +22,17 @@ const MergeSort = (props: {
     for (let size = 1; size < n; size *= 2) {
       for (let leftStart = 0; leftStart < n; leftStart += 2 * size) {
         //Get the two sub arrays
-        let left = leftStart,
-          right = Math.min(left + size, n),
-          leftLimit = right,
-          rightLimit = Math.min(right + size, n);
+        let left = leftStart;
+        let right = Math.min(left + size, n);
+        let leftLimit = right;
+        let rightLimit = Math.min(right + size, n);
 
         //Merge the sub arrays
 
-        merge(left, right, leftLimit, rightLimit, sorted, buffer);
+        await merge(left, right, leftLimit, rightLimit, sorted, buffer);
       }
 
       //Swap the sorted sub array and merge them
-      await timeout(1000);
       let temp = sorted;
       sorted = buffer;
       buffer = temp;
@@ -50,9 +51,16 @@ const MergeSort = (props: {
     sorted: number[],
     buffer: number[]
   ) => {
-    await timeout(250);
-    let i = left;
+    const arrRange = (start: number, stop: number, step: number) =>
+      Array.from(
+        { length: (stop - start) / step + 1 },
+        (_, i) => start + i * step
+      );
 
+    let setCurrent = arrRange(left, rightLimit - 1, 1);
+    props.setCurrentIndex(setCurrent);
+    await timeout(100);
+    let i = left;
     //Compare the two sub arrays and merge them in the sorted order
     while (left < leftLimit && right < rightLimit) {
       if (sorted[left] <= sorted[right]) {
@@ -61,7 +69,8 @@ const MergeSort = (props: {
         buffer[i++] = sorted[right++];
       }
     }
-    await timeout(250);
+
+    await timeout(100);
     //If there are elements in the left sub array then add it to the result
     while (left < leftLimit) {
       buffer[i++] = sorted[left++];
