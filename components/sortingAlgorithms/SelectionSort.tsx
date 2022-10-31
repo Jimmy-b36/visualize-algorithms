@@ -6,6 +6,7 @@ const SelectionSort = (props: {
   setIsSorting: Dispatch<SetStateAction<boolean>>;
   setCurrentIndex: Dispatch<SetStateAction<number[]>>;
   setTestIndex: Dispatch<SetStateAction<number[]>>;
+  isSorting: boolean;
 }) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -37,12 +38,20 @@ const SelectionSort = (props: {
         props.setTestIndex([j]);
       }
     }
+    const setComplete = Array.from(
+      { length: newArr.length },
+      (x: number, k: number) => k
+    );
+    props.setCurrentIndex(setComplete);
+    props.setIsSorting(false);
+    return;
   };
   return (
     <div>
       <button
         onClick={() => selectionSort(props.primaryArray)}
         className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+        disabled={props.isSorting}
       >
         <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           Selection sort
