@@ -4,9 +4,11 @@ const BubbleSort = (props: {
   primaryArray: number[];
   setPrimaryArray: Dispatch<SetStateAction<number[]>>;
   setIsSorting: Dispatch<SetStateAction<boolean>>;
+  setCurrentIndex: Dispatch<SetStateAction<number[]>>;
+  setTestIndex: Dispatch<SetStateAction<number[]>>;
 }) => {
   //bubbleSort
-  const bubbleSort = async (arr: number[]) => {
+  const bubbleSort = async (arr: number[], animations = []) => {
     let newArr = [...arr];
     setTimeout(() => {
       //loop through whole array
@@ -22,6 +24,8 @@ const BubbleSort = (props: {
               newArr[j + 1] = tmp;
               let setArr = [...newArr];
               setTimeout(() => {
+                props.setTestIndex([j]);
+                props.setCurrentIndex([j + 1]);
                 props.setPrimaryArray(setArr);
               }, j * 10);
             }
