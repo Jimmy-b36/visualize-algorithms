@@ -4,33 +4,39 @@ const SelectionSort = (props: {
   primaryArray: number[];
   setPrimaryArray: Dispatch<SetStateAction<number[]>>;
   setIsSorting: Dispatch<SetStateAction<boolean>>;
+  setCurrentIndex: Dispatch<SetStateAction<number[]>>;
+  setTestIndex: Dispatch<SetStateAction<number[]>>;
 }) => {
+  // timeout function for merge sort
+  const timeout = (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
   // selectionSort
-  const selectionSort = (arr: number[]) => {
+  const selectionSort = async (arr: number[]) => {
     props.setIsSorting(true);
 
-    setTimeout(() => {
-      let newArr = [...arr];
-      // outer loop through array
-      for (let i = 0; i < arr.length - 1; i++) {
-        setTimeout(() => {
-          // inner loop through array to find smallest value
-          for (let j = i + 1; j < arr.length; j++) {
-            // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value
-            if (newArr[i] > newArr[j]) {
-              let temp = newArr[i];
-              newArr[i] = newArr[j];
-              newArr[j] = temp;
-              let newStep = [...newArr];
-              // setting our primary array to display each step
-              setTimeout(() => {
-                props.setPrimaryArray([...newStep]);
-              }, j * 10);
-            }
-          }
-        }, i * 1000);
+    let newArr = [...arr];
+    // outer loop through array
+    for (let i = 0; i < arr.length - 1; i++) {
+      await timeout(200);
+      // inner loop through array to find smallest value
+      for (let j = i + 1; j < arr.length; j++) {
+        // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value
+        if (newArr[i] > newArr[j]) {
+          let temp = newArr[i];
+          newArr[i] = newArr[j];
+          newArr[j] = temp;
+          let newStep = [...newArr];
+          // setting our primary array to display each step
+          await timeout(10);
+          props.setPrimaryArray([...newStep]);
+        }
+        await timeout(10);
+        props.setCurrentIndex([i]);
+        props.setTestIndex([j]);
       }
-    }, 500);
+    }
   };
   return (
     <div>

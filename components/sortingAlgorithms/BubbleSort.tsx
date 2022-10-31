@@ -7,32 +7,33 @@ const BubbleSort = (props: {
   setCurrentIndex: Dispatch<SetStateAction<number[]>>;
   setTestIndex: Dispatch<SetStateAction<number[]>>;
 }) => {
+  // timeout function for merge sort
+  const timeout = (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
   //bubbleSort
-  const bubbleSort = async (arr: number[], animations = []) => {
+  const bubbleSort = async (arr: number[]) => {
     let newArr = [...arr];
-    setTimeout(() => {
-      //loop through whole array
-      for (let i = 0; i < newArr.length; i++) {
-        setTimeout(() => {
-          //loop through array again testing currentValue against next value in array
-          for (let j = 0; j < newArr.length; j++) {
-            //if the next value is bigger set the current value to the bigger value
-            if (newArr[j] > newArr[j + 1]) {
-              //swap values as we go through the array
-              let tmp = newArr[j];
-              newArr[j] = newArr[j + 1];
-              newArr[j + 1] = tmp;
-              let setArr = [...newArr];
-              setTimeout(() => {
-                props.setTestIndex([j]);
-                props.setCurrentIndex([j + 1]);
-                props.setPrimaryArray(setArr);
-              }, j * 10);
-            }
-          }
-        }, i * 1000);
+    //loop through whole array
+    for (let i = 0; i < newArr.length; i++) {
+      await timeout(500);
+      //loop through array again testing currentValue against next value in array
+      for (let j = 0; j < newArr.length; j++) {
+        //if the next value is bigger set the current value to the bigger value
+        if (newArr[j] > newArr[j + 1]) {
+          //swap values as we go through the array
+          let tmp = newArr[j];
+          newArr[j] = newArr[j + 1];
+          newArr[j + 1] = tmp;
+          let setArr = [...newArr];
+          await timeout(10);
+          props.setTestIndex([j]);
+          props.setCurrentIndex([j + 1]);
+          props.setPrimaryArray(setArr);
+        }
       }
-    }, 500);
+    }
+
     return;
   };
 
