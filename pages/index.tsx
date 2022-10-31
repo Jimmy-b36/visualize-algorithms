@@ -8,11 +8,13 @@ const Home: NextPage = () => {
   const [primaryArray, setPrimaryArray] = useState<number[]>([]);
   const [reset, setReset] = useState<boolean>(false);
   const [isSorting, setIsSorting] = useState<boolean>(false);
+  const [currentIndex, setCurrentIndex] = useState<number[]>([]);
+  const [testIndex, setTestIndex] = useState<number[]>([]);
 
   // generate new array function
   const generateArray = () => {
     const generatedArray: number[] = Array.from(
-      { length: Math.floor(Math.random() * 50 + 50) },
+      { length: Math.floor(Math.random() * 50 + 30) },
       () => Math.floor(Math.random() * 500 + 1)
     );
     return generatedArray;
@@ -33,6 +35,8 @@ const Home: NextPage = () => {
   useEffect(() => {
     let shuffled = primaryArray && shuffleArray(primaryArray);
     setPrimaryArray(shuffled);
+    setCurrentIndex([]);
+    setTestIndex([]);
   }, [reset]);
 
   useEffect(() => {
@@ -43,13 +47,27 @@ const Home: NextPage = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="flex flex-row items-end justify-center p-3 m-2 border-2 border-black h-[550px]">
-        {primaryArray?.map((element: number) => (
-          <div
-            key={Math.random() * 100}
-            className={`w-2 m-1 text-center bg-slate-300 `}
-            style={{ height: `${element}px` }}
-          ></div>
-        ))}
+        {primaryArray?.map((element: number, index: number) =>
+          currentIndex?.includes(index) ? (
+            <div
+              key={index}
+              className={`w-2 m-1 text-center bg-green-500 `}
+              style={{ height: `${element}px` }}
+            ></div>
+          ) : testIndex?.includes(index) ? (
+            <div
+              key={index}
+              className={`w-2 m-1 text-center bg-red-600 `}
+              style={{ height: `${element}px` }}
+            ></div>
+          ) : (
+            <div
+              key={index}
+              className={`w-2 m-1 text-center bg-slate-300 `}
+              style={{ height: `${element}px` }}
+            ></div>
+          )
+        )}
       </div>
       <div className="flex flex-row">
         <div className="flex flex-row pr-2 mr-2 border-r-2 border-black">
@@ -74,16 +92,22 @@ const Home: NextPage = () => {
           setPrimaryArray={setPrimaryArray}
           primaryArray={primaryArray}
           setIsSorting={setIsSorting}
+          setCurrentIndex={setCurrentIndex}
+          setTestIndex={setTestIndex}
         />
         <BubbleSort
           setPrimaryArray={setPrimaryArray}
           primaryArray={primaryArray}
           setIsSorting={setIsSorting}
+          setCurrentIndex={setCurrentIndex}
+          setTestIndex={setTestIndex}
         />
         <MergeSort
           setPrimaryArray={setPrimaryArray}
           primaryArray={primaryArray}
           setIsSorting={setIsSorting}
+          setCurrentIndex={setCurrentIndex}
+          setTestIndex={setTestIndex}
         />
       </div>
     </div>
