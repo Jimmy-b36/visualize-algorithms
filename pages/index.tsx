@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import SelectionSort from '../components/sortingAlgorithms/SelectionSort';
 import BubbleSort from '../components/sortingAlgorithms/BubbleSort';
 import MergeSort from '../components/sortingAlgorithms/MergeSort';
+import FlipMove from 'react-flip-move';
 
 const Home: NextPage = () => {
   const [primaryArray, setPrimaryArray] = useState<number[]>([]);
@@ -41,39 +42,47 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const generatedArray: number[] = generateArray();
+    setIsSorting(false);
     setPrimaryArray(generatedArray);
   }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="flex flex-row items-end justify-center p-3 m-2 border-2 border-black h-[550px]">
-        {primaryArray?.map((element: number, index: number) =>
-          currentIndex?.includes(index) ? (
-            <div
-              key={index}
-              className={`w-2 m-1 text-center bg-green-500 `}
-              style={{ height: `${element}px` }}
-            ></div>
-          ) : testIndex?.includes(index) ? (
-            <div
-              key={index}
-              className={`w-2 m-1 text-center bg-red-600 `}
-              style={{ height: `${element}px` }}
-            ></div>
-          ) : (
-            <div
-              key={index}
-              className={`w-2 m-1 text-center bg-slate-300 `}
-              style={{ height: `${element}px` }}
-            ></div>
-          )
-        )}
+        <FlipMove
+          className="flex flex-row items-end justify-center p-3 m-2 border-2 border-black h-[550px]"
+          enterAnimation="accordionHorizontal"
+          leaveAnimation="accordionHorizontal"
+        >
+          {primaryArray?.map((element: number, index: number) =>
+            currentIndex?.includes(index) ? (
+              <div
+                key={index}
+                className={`w-2 m-1 text-center bg-green-500 `}
+                style={{ height: `${element}px` }}
+              ></div>
+            ) : testIndex?.includes(index) ? (
+              <div
+                key={index}
+                className={`w-2 m-1 text-center bg-red-600 `}
+                style={{ height: `${element}px` }}
+              ></div>
+            ) : (
+              <div
+                key={index}
+                className={`w-2 m-1 text-center bg-slate-300 `}
+                style={{ height: `${element}px` }}
+              ></div>
+            )
+          )}
+        </FlipMove>
       </div>
       <div className="flex flex-row">
         <div className="flex flex-row pr-2 mr-2 border-r-2 border-black">
           <button
             onClick={() => setPrimaryArray(generateArray)}
             className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+            disabled={isSorting}
           >
             <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
               Generate array
@@ -82,6 +91,7 @@ const Home: NextPage = () => {
           <button
             onClick={() => setReset(reset ? false : true)}
             className="inline-block rounded-full bg-gradient-to-r  from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+            disabled={isSorting}
           >
             <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
               randomize
@@ -94,6 +104,7 @@ const Home: NextPage = () => {
           setIsSorting={setIsSorting}
           setCurrentIndex={setCurrentIndex}
           setTestIndex={setTestIndex}
+          isSorting={isSorting}
         />
         <BubbleSort
           setPrimaryArray={setPrimaryArray}
@@ -101,6 +112,7 @@ const Home: NextPage = () => {
           setIsSorting={setIsSorting}
           setCurrentIndex={setCurrentIndex}
           setTestIndex={setTestIndex}
+          isSorting={isSorting}
         />
         <MergeSort
           setPrimaryArray={setPrimaryArray}
@@ -108,6 +120,7 @@ const Home: NextPage = () => {
           setIsSorting={setIsSorting}
           setCurrentIndex={setCurrentIndex}
           setTestIndex={setTestIndex}
+          isSorting={isSorting}
         />
       </div>
     </div>
