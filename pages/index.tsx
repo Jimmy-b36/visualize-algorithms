@@ -3,13 +3,23 @@ import { useEffect, useState } from 'react';
 import SelectionSort from '../components/sortingAlgorithms/SelectionSort';
 import BubbleSort from '../components/sortingAlgorithms/BubbleSort';
 import MergeSort from '../components/sortingAlgorithms/MergeSort';
+import InsertionSort from '../components/sortingAlgorithms/InsertionSort';
 import FlipMove from 'react-flip-move';
+import { sortingProps } from '../types';
 
 const Home: NextPage = () => {
   const [primaryArray, setPrimaryArray] = useState<number[]>([]);
   const [isSorting, setIsSorting] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number[]>([]);
   const [testIndex, setTestIndex] = useState<number[]>([]);
+  const sortProps: sortingProps = {
+    setPrimaryArray,
+    primaryArray,
+    setIsSorting,
+    setCurrentIndex,
+    setTestIndex,
+    isSorting,
+  };
 
   // generate new array function
   const generateArray = () => {
@@ -98,30 +108,11 @@ const Home: NextPage = () => {
             </span>
           </button>
         </div>
-        <SelectionSort
-          setPrimaryArray={setPrimaryArray}
-          primaryArray={primaryArray}
-          setIsSorting={setIsSorting}
-          setCurrentIndex={setCurrentIndex}
-          setTestIndex={setTestIndex}
-          isSorting={isSorting}
-        />
-        <BubbleSort
-          setPrimaryArray={setPrimaryArray}
-          primaryArray={primaryArray}
-          setIsSorting={setIsSorting}
-          setCurrentIndex={setCurrentIndex}
-          setTestIndex={setTestIndex}
-          isSorting={isSorting}
-        />
-        <MergeSort
-          setPrimaryArray={setPrimaryArray}
-          primaryArray={primaryArray}
-          setIsSorting={setIsSorting}
-          setCurrentIndex={setCurrentIndex}
-          setTestIndex={setTestIndex}
-          isSorting={isSorting}
-        />
+
+        <SelectionSort {...sortProps} />
+        <BubbleSort {...sortProps} />
+        <MergeSort {...sortProps} />
+        <InsertionSort {...sortProps} />
       </div>
     </div>
   );
