@@ -7,7 +7,6 @@ import FlipMove from 'react-flip-move';
 
 const Home: NextPage = () => {
   const [primaryArray, setPrimaryArray] = useState<number[]>([]);
-  const [reset, setReset] = useState<boolean>(false);
   const [isSorting, setIsSorting] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number[]>([]);
   const [testIndex, setTestIndex] = useState<number[]>([]);
@@ -33,12 +32,13 @@ const Home: NextPage = () => {
     return array;
   };
 
-  useEffect(() => {
+  const resetArray = () => {
     let shuffled = primaryArray && shuffleArray(primaryArray);
     setPrimaryArray(shuffled);
     setCurrentIndex([]);
     setTestIndex([]);
-  }, [reset]);
+    return;
+  };
 
   useEffect(() => {
     const generatedArray: number[] = generateArray();
@@ -89,7 +89,7 @@ const Home: NextPage = () => {
             </span>
           </button>
           <button
-            onClick={() => setReset(reset ? false : true)}
+            onClick={resetArray}
             className="inline-block rounded-full bg-gradient-to-r  from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
             disabled={isSorting}
           >
