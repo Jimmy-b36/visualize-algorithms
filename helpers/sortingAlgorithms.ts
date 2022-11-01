@@ -1,4 +1,4 @@
-//recursive merge sort:
+// * recursive merge sort:
 // const mergeSort = (arr: number[]) => {
 //   const newArr: number[] = [...arr];
 //   if (newArr.length === 1) return newArr;
@@ -25,7 +25,7 @@
 //   return sortedArr;
 // };
 
-// Iterative merge sort
+// * Iterative merge sort
 const mergeSort = (arr: number[]) => {
   //Create two arrays for sorting
   let sorted = Array.from(arr);
@@ -90,9 +90,7 @@ const selectionSort = (arr: number[]) => {
         minIdx = j;
       }
     }
-    let tmp = arr[minIdx];
-    arr[minIdx] = arr[i];
-    arr[i] = tmp;
+    [arr[minIdx], arr[i]] = [arr[i], arr[minIdx]];
   }
   return arr;
 };
@@ -100,12 +98,24 @@ const selectionSort = (arr: number[]) => {
 const bubbleSort = (arr: number[]) => {
   arr = shuffleArray(arr);
   for (let i = 0; i < arr.length; i++) {
+    //loop through array again testing currentValue against next value in array
     for (let j = 0; j < arr.length; j++) {
+      //if the next value is bigger set the current value to the bigger value
       if (arr[j] > arr[j + 1]) {
-        arr.splice(j + 2, 0, arr[j]);
-        arr.splice(j, 1);
-      } else {
-        continue;
+        //swap values as we go through the array
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
+    }
+  }
+  return arr;
+};
+
+const insertionSort: (arr: number[]) => number[] = (arr: number[]) => {
+  arr = shuffleArray(arr);
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i; j > 0; j--) {
+      if (arr[j] < arr[j - 1]) {
+        [arr[j], arr[j - 1]] = [arr[j - 1], arr[j]];
       }
     }
   }
@@ -123,8 +133,6 @@ const shuffleArray = (arr: number[]) => {
   return arr;
 };
 
-const data = [1, 3, 6, 8, 11, 2, 5, 10];
-
 // console.log('mergeSort -> ', mergeSort(data));
 
-export { mergeSort, selectionSort, bubbleSort };
+export { mergeSort, selectionSort, bubbleSort, insertionSort };

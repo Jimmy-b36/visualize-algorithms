@@ -1,38 +1,40 @@
 import { Dispatch, SetStateAction } from 'react';
 
-const BubbleSort = (props: {
-  primaryArray: number[];
-  setPrimaryArray: Dispatch<SetStateAction<number[]>>;
-  setIsSorting: Dispatch<SetStateAction<boolean>>;
-  setCurrentIndex: Dispatch<SetStateAction<number[]>>;
-  setTestIndex: Dispatch<SetStateAction<number[]>>;
-  isSorting: boolean;
-}) => {
+import { sortingProps } from '../../types';
+
+const BubbleSort = ({
+  primaryArray,
+  setPrimaryArray,
+  setIsSorting,
+  setCurrentIndex,
+  setTestIndex,
+  isSorting,
+}: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
+
   //bubbleSort
   const bubbleSort = async (arr: number[]) => {
-    props.setIsSorting(true);
+    setIsSorting(true);
     let newArr = [...arr];
     //loop through whole array
     for (let i = 0; i < newArr.length; i++) {
-      await timeout(500);
+      await timeout(100);
       //loop through array again testing currentValue against next value in array
       for (let j = 0; j < newArr.length; j++) {
         //if the next value is bigger set the current value to the bigger value
         if (newArr[j] > newArr[j + 1]) {
           //swap values as we go through the array
-          let tmp = newArr[j];
-          newArr[j] = newArr[j + 1];
-          newArr[j + 1] = tmp;
+          [newArr[j], newArr[j + 1]] = [newArr[j + 1], newArr[j]];
+
           let setArr = [...newArr];
-          // update diplayed array
+          // update displayed array
           await timeout(10);
-          props.setTestIndex([j + 2]);
-          props.setCurrentIndex([j + 1]);
-          props.setPrimaryArray(setArr);
+          setTestIndex([j + 2]);
+          setCurrentIndex([j + 1]);
+          setPrimaryArray(setArr);
         }
       }
     }
@@ -40,17 +42,17 @@ const BubbleSort = (props: {
       { length: newArr.length },
       (x: number, k: number) => k
     );
-    props.setCurrentIndex(setComplete);
-    props.setIsSorting(false);
+    setCurrentIndex(setComplete);
+    setIsSorting(false);
     return;
   };
 
   return (
     <div>
       <button
-        onClick={() => bubbleSort(props.primaryArray)}
+        onClick={() => bubbleSort(primaryArray)}
         className={`inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75 `}
-        disabled={props.isSorting}
+        disabled={isSorting}
       >
         <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           Bubble sort

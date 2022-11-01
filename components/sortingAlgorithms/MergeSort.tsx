@@ -1,13 +1,13 @@
-import { Dispatch, SetStateAction } from 'react';
+import { sortingProps } from '../../types';
 
-const MergeSort = (props: {
-  primaryArray: number[];
-  setPrimaryArray: Dispatch<SetStateAction<number[]>>;
-  setIsSorting: Dispatch<SetStateAction<boolean>>;
-  setCurrentIndex: Dispatch<SetStateAction<number[]>>;
-  setTestIndex: Dispatch<SetStateAction<number[]>>;
-  isSorting: boolean;
-}) => {
+const MergeSort = ({
+  primaryArray,
+  setPrimaryArray,
+  setIsSorting,
+  setCurrentIndex,
+  setTestIndex,
+  isSorting,
+}: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -38,7 +38,7 @@ const MergeSort = (props: {
       sorted = buffer;
       buffer = temp;
       let newStep = [...sorted];
-      props.setPrimaryArray(newStep);
+      setPrimaryArray(newStep);
     }
 
     return sorted;
@@ -59,7 +59,7 @@ const MergeSort = (props: {
       );
 
     let setCurrent = arrRange(left, rightLimit - 1, 1);
-    props.setCurrentIndex(setCurrent);
+    setCurrentIndex(setCurrent);
     await timeout(100);
     let i = left;
     //Compare the two sub arrays and merge them in the sorted order
@@ -87,9 +87,9 @@ const MergeSort = (props: {
   return (
     <div>
       <button
-        onClick={() => mergeSort(props.primaryArray)}
+        onClick={() => mergeSort(primaryArray)}
         className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
-        disabled={props.isSorting}
+        disabled={isSorting}
       >
         <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           Merge sort

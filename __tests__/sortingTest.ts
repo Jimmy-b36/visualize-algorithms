@@ -1,6 +1,9 @@
-const mergeSort = require('../helpers/sortingAlgorithms').mergeSort;
-const selectionSort = require('../helpers/sortingAlgorithms').selectionSort;
-const bubbleSort = require('../helpers/sortingAlgorithms').bubbleSort;
+const {
+  mergeSort,
+  selectionSort,
+  bubbleSort,
+  insertionSort,
+} = require('../helpers/sortingAlgorithms');
 
 const data: number[][] = [];
 for (let i = 0; i < 10; i++) {
@@ -28,8 +31,8 @@ test('mergeSort', () => {
   });
 });
 
-// test('insertionSort', () => {
-//   const data: number[] = [24, 76, 10, 73, 18];
-//   expect(insertionSort(data)).toEqual([10, 18, 24, 73, 76]);
-// });
+test('insertionSort', () => {
+  const data: number[] = [24, 76, 10, 73, 18];
+  expect(insertionSort(data)).toEqual([10, 18, 24, 73, 76]);
+});
 export {};
