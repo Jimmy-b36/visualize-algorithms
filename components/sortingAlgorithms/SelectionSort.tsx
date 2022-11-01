@@ -25,9 +25,8 @@ const SelectionSort = ({
       for (let j = i + 1; j < arr.length; j++) {
         // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value
         if (newArr[i] > newArr[j]) {
-          let temp = newArr[i];
-          newArr[i] = newArr[j];
-          newArr[j] = temp;
+          [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+
           let newStep = [...newArr];
           // setting our primary array to display each step
           await timeout(10);

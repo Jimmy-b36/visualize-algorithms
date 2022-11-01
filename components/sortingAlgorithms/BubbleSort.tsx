@@ -27,12 +27,11 @@ const BubbleSort = ({
         //if the next value is bigger set the current value to the bigger value
         if (newArr[j] > newArr[j + 1]) {
           //swap values as we go through the array
-          let tmp = newArr[j];
-          newArr[j] = newArr[j + 1];
-          newArr[j + 1] = tmp;
+          [newArr[j], newArr[j + 1]] = [newArr[j + 1], newArr[j]];
+
           let setArr = [...newArr];
           // update displayed array
-          await timeout(primaryArray.length > 60 ? 10 : 500);
+          await timeout(10);
           setTestIndex([j + 2]);
           setCurrentIndex([j + 1]);
           setPrimaryArray(setArr);
