@@ -5,4 +5,5 @@ export interface sortingProps {
   setCurrentIndex: Dispatch<SetStateAction<number[]>>;
   setTestIndex: Dispatch<SetStateAction<number[]>>;
   isSorting: boolean;
+  speed: { [key: number]: number[] };
 }

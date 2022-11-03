@@ -7,6 +7,7 @@ const MergeSort = ({
   setCurrentIndex,
   setTestIndex,
   isSorting,
+  speed,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -15,6 +16,7 @@ const MergeSort = ({
 
   // Iterative merge sort
   const mergeSort = async (arr: number[]) => {
+    setIsSorting(true);
     //Create two arrays for sorting
     let sorted: number[] = [...arr];
     let n: number = sorted.length;
@@ -40,7 +42,7 @@ const MergeSort = ({
       let newStep = [...sorted];
       setPrimaryArray(newStep);
     }
-
+    setIsSorting(false);
     return sorted;
   };
 
@@ -60,7 +62,7 @@ const MergeSort = ({
 
     let setCurrent = arrRange(left, rightLimit - 1, 1);
     setCurrentIndex(setCurrent);
-    await timeout(100);
+    await timeout(speed[primaryArray.length][0]);
     let i = left;
     //Compare the two sub arrays and merge them in the sorted order
     while (left < leftLimit && right < rightLimit) {
@@ -71,7 +73,7 @@ const MergeSort = ({
       }
     }
 
-    await timeout(100);
+    await timeout(speed[primaryArray.length][0]);
     //If there are elements in the left sub array then add it to the result
     while (left < leftLimit) {
       buffer[i++] = sorted[left++];
@@ -88,10 +90,10 @@ const MergeSort = ({
     <div>
       <button
         onClick={() => mergeSort(primaryArray)}
-        className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+        className="inline-block  rounded-full bg-gradient-to-r mx-1 h-full from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
         disabled={isSorting}
       >
-        <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
+        <span className="block px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           Merge sort
         </span>
       </button>
