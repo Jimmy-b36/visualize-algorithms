@@ -9,6 +9,7 @@ const BubbleSort = ({
   setCurrentIndex,
   setTestIndex,
   isSorting,
+  speed,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -21,9 +22,12 @@ const BubbleSort = ({
     let newArr = [...arr];
     //loop through whole array
     for (let i = 0; i < newArr.length; i++) {
-      await timeout(100);
+      await timeout(speed[primaryArray.length][0] * 2);
       //loop through array again testing currentValue against next value in array
       for (let j = 0; j < newArr.length; j++) {
+        setTestIndex([j + 1]);
+        setCurrentIndex([j]);
+
         //if the next value is bigger set the current value to the bigger value
         if (newArr[j] > newArr[j + 1]) {
           //swap values as we go through the array
@@ -31,9 +35,7 @@ const BubbleSort = ({
 
           let setArr = [...newArr];
           // update displayed array
-          await timeout(10);
-          setTestIndex([j + 2]);
-          setCurrentIndex([j + 1]);
+          await timeout(speed[primaryArray.length][1] * 2);
           setPrimaryArray(setArr);
         }
       }
@@ -51,10 +53,10 @@ const BubbleSort = ({
     <div>
       <button
         onClick={() => bubbleSort(primaryArray)}
-        className={`inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75 `}
+        className={`inline-block  rounded-full bg-gradient-to-r h-full from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75 `}
         disabled={isSorting}
       >
-        <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
+        <span className="block px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           Bubble sort
         </span>
       </button>

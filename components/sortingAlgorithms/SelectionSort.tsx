@@ -7,6 +7,7 @@ const SelectionSort = ({
   setCurrentIndex,
   setTestIndex,
   isSorting,
+  speed,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -20,7 +21,7 @@ const SelectionSort = ({
     let newArr = [...arr];
     // outer loop through array
     for (let i = 0; i < arr.length - 1; i++) {
-      await timeout(200);
+      await timeout(speed[primaryArray.length][0]);
       // inner loop through array to find smallest value
       for (let j = i + 1; j < arr.length; j++) {
         // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value
@@ -29,10 +30,10 @@ const SelectionSort = ({
 
           let newStep = [...newArr];
           // setting our primary array to display each step
-          await timeout(10);
+          await timeout(speed[primaryArray.length][1]);
           setPrimaryArray([...newStep]);
         }
-        await timeout(10);
+        await timeout(speed[primaryArray.length][1]);
         setCurrentIndex([i]);
         setTestIndex([j]);
       }
@@ -49,10 +50,10 @@ const SelectionSort = ({
     <div>
       <button
         onClick={() => selectionSort(primaryArray)}
-        className="inline-block  rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+        className="inline-block  rounded-full bg-gradient-to-r mx-1 h-full from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
         disabled={isSorting}
       >
-        <span className="block px-8 py-3 text-sm font-medium bg-white rounded-full hover:bg-transparent">
+        <span className="block px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
           Selection sort
         </span>
       </button>
