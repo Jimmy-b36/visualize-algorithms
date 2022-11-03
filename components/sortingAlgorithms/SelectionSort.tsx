@@ -23,7 +23,9 @@ const SelectionSort = ({
     for (let i = 0; i < arr.length - 1; i++) {
       await timeout(speed[primaryArray.length][0]);
       // inner loop through array to find smallest value
+      setCurrentIndex([i]);
       for (let j = i + 1; j < arr.length; j++) {
+        setTestIndex([j]);
         // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value
         if (newArr[i] > newArr[j]) {
           [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
@@ -34,8 +36,7 @@ const SelectionSort = ({
           setPrimaryArray([...newStep]);
         }
         await timeout(speed[primaryArray.length][1]);
-        setCurrentIndex([i]);
-        setTestIndex([j]);
+        setTestIndex([j + 1]);
       }
     }
     const setComplete = Array.from(

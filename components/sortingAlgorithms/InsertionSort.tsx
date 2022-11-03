@@ -21,6 +21,8 @@ const InsertionSort = ({
     for (let i = 0; i < arr.length; i++) {
       await timeout(speed[primaryArray.length][0]);
       for (let j = i; j > 0; j--) {
+        setCurrentIndex([j]);
+        setTestIndex([j - 1]);
         if (newArr[j] < newArr[j - 1]) {
           [newArr[j], newArr[j - 1]] = [newArr[j - 1], newArr[j]];
           let newStep = [...newArr];
