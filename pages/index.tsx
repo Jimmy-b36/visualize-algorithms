@@ -204,7 +204,9 @@ const Home: NextPage = () => {
                 height: `${element}px`,
                 width: arraySizeOption[arraySize],
               }}
-            ></div>
+            >
+              {arraySize > 40 ? element : null}
+            </div>
           ) : testIndex?.includes(index) ? (
             <div
               key={index}
@@ -217,12 +219,14 @@ const Home: NextPage = () => {
           ) : (
             <div
               key={index}
-              className={`m-1 text-center border border-black bg-slate-300 `}
+              className={`m-1 text-center flex justify-center items-end border border-black bg-slate-300 `}
               style={{
                 height: `${element}px`,
                 width: arraySizeOption[arraySize],
               }}
-            ></div>
+            >
+              {arraySize < 40 ? element : null}
+            </div>
           )
         )}
       </div>
