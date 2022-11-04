@@ -10,6 +10,7 @@ const BubbleSort = ({
   setTestIndex,
   isSorting,
   speed,
+  stop,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -18,13 +19,19 @@ const BubbleSort = ({
 
   //bubbleSort
   const bubbleSort = async (arr: number[]) => {
+    stop.current = false;
     setIsSorting(true);
     let newArr = [...arr];
     //loop through whole array
     for (let i = 0; i < newArr.length; i++) {
-      await timeout(speed[primaryArray.length][0] * 2);
+      await timeout(
+        primaryArray.length < 20
+          ? speed[primaryArray.length][0] * 2
+          : speed[primaryArray.length][0]
+      );
       //loop through array again testing currentValue against next value in array
       for (let j = 0; j < newArr.length; j++) {
+        if (stop.current) return setIsSorting(false);
         setTestIndex([j + 1]);
         setCurrentIndex([j]);
 
@@ -32,12 +39,13 @@ const BubbleSort = ({
         if (newArr[j] > newArr[j + 1]) {
           //swap values as we go through the array
           [newArr[j], newArr[j + 1]] = [newArr[j + 1], newArr[j]];
-
-          let setArr = [...newArr];
-          // update displayed array
-          await timeout(speed[primaryArray.length][1] * 2);
-          setPrimaryArray(setArr);
         }
+        let setArr = [...newArr];
+        await timeout(speed[primaryArray.length][1]);
+        setTestIndex([j + 1]);
+        setCurrentIndex([j]);
+        setPrimaryArray(setArr);
+        // update displayed array
       }
     }
     const setComplete = Array.from(

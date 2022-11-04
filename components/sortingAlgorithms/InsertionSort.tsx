@@ -7,6 +7,7 @@ const InsertionSort = ({
   setTestIndex,
   isSorting,
   speed,
+  stop,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -14,6 +15,7 @@ const InsertionSort = ({
   };
   // insertionSort
   const insertionSort = async (arr: number[]) => {
+    stop.current = false;
     setIsSorting(true);
 
     let newArr = [...arr];
@@ -21,8 +23,10 @@ const InsertionSort = ({
     for (let i = 0; i < arr.length; i++) {
       await timeout(speed[primaryArray.length][0]);
       for (let j = i; j > 0; j--) {
+        if (stop.current) return setIsSorting(false);
         setCurrentIndex([j]);
         setTestIndex([j - 1]);
+
         if (newArr[j] < newArr[j - 1]) {
           [newArr[j], newArr[j - 1]] = [newArr[j - 1], newArr[j]];
           let newStep = [...newArr];
@@ -30,6 +34,7 @@ const InsertionSort = ({
           await timeout(speed[primaryArray.length][1]);
           setPrimaryArray([...newStep]);
         }
+
         await timeout(speed[primaryArray.length][1]);
         setCurrentIndex([j - 1]);
         setTestIndex([j - 2]);

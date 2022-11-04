@@ -1,4 +1,5 @@
 import { sortingProps } from '../../types';
+import { useEffect, useRef, useState } from 'react';
 
 const SelectionSort = ({
   primaryArray,
@@ -8,14 +9,16 @@ const SelectionSort = ({
   setTestIndex,
   isSorting,
   speed,
+  stop,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
-
+  let x: any = null;
   // selectionSort
   const selectionSort = async (arr: number[]) => {
+    stop.current = false;
     setIsSorting(true);
 
     let newArr = [...arr];
@@ -25,6 +28,8 @@ const SelectionSort = ({
       // inner loop through array to find smallest value
       setCurrentIndex([i]);
       for (let j = i + 1; j < arr.length; j++) {
+        if (stop.current) return setIsSorting(false);
+
         setTestIndex([j]);
         // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value
         if (newArr[i] > newArr[j]) {

@@ -5,9 +5,9 @@ const MergeSort = ({
   setPrimaryArray,
   setIsSorting,
   setCurrentIndex,
-  setTestIndex,
   isSorting,
   speed,
+  stop,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -16,6 +16,7 @@ const MergeSort = ({
 
   // Iterative merge sort
   const mergeSort = async (arr: number[]) => {
+    stop.current = false;
     setIsSorting(true);
     //Create two arrays for sorting
     let sorted: number[] = [...arr];
@@ -24,6 +25,7 @@ const MergeSort = ({
 
     for (let size = 1; size < n; size *= 2) {
       for (let leftStart = 0; leftStart < n; leftStart += 2 * size) {
+        if (stop.current) return setIsSorting(false);
         //Get the two sub arrays
         let left = leftStart;
         let right = Math.min(left + size, n);

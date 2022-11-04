@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import SelectionSort from '../components/sortingAlgorithms/SelectionSort';
 import BubbleSort from '../components/sortingAlgorithms/BubbleSort';
 import MergeSort from '../components/sortingAlgorithms/MergeSort';
@@ -26,6 +26,7 @@ const Home: NextPage = () => {
     60: '10px',
     80: '5px',
   };
+  const stop = useRef(false);
   const sortProps: sortingProps = {
     setPrimaryArray,
     primaryArray,
@@ -34,6 +35,7 @@ const Home: NextPage = () => {
     setTestIndex,
     isSorting,
     speed,
+    stop,
   };
 
   // generate new array function
@@ -187,6 +189,16 @@ const Home: NextPage = () => {
               randomize
             </span>
           </button>
+          <button
+            className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+            onClick={() => {
+              stop.current = !stop.current;
+            }}
+          >
+            <span className="block h-full px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
+              stop
+            </span>
+          </button>
         </div>
 
         <SelectionSort {...sortProps} />
@@ -236,6 +248,7 @@ const Home: NextPage = () => {
           )
         )}
       </div>
+      <div>Hello this is a div</div>
     </div>
   );
 };
