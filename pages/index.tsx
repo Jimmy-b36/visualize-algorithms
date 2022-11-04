@@ -201,9 +201,7 @@ const Home: NextPage = () => {
               key={index}
               className={`${
                 arraySize < 20 ? 'mx-3' : 'mx-1'
-              }  flex justify-center my-1 items-end border border-black bg-green-500  ${
-                !isSorting ? 'animate-bounce' : null
-              }`}
+              }  flex justify-center my-1 items-end border border-black bg-green-500`}
               style={{
                 height: `${element}px`,
                 width: arraySizeOption[arraySize],
