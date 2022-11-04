@@ -11,6 +11,8 @@ const BubbleSort = ({
   isSorting,
   speed,
   stop,
+  setCurrentSelection,
+  pause,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -21,6 +23,7 @@ const BubbleSort = ({
   const bubbleSort = async (arr: number[]) => {
     stop.current = false;
     setIsSorting(true);
+    setCurrentSelection('Bubble Sort');
     let newArr = [...arr];
     //loop through whole array
     for (let i = 0; i < newArr.length; i++) {
@@ -31,7 +34,7 @@ const BubbleSort = ({
       );
       //loop through array again testing currentValue against next value in array
       for (let j = 0; j < newArr.length; j++) {
-        if (stop.current) return setIsSorting(false);
+        await pause();
         setTestIndex([j + 1]);
         setCurrentIndex([j]);
 

@@ -10,6 +10,8 @@ const SelectionSort = ({
   isSorting,
   speed,
   stop,
+  setCurrentSelection,
+  pause,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -28,7 +30,7 @@ const SelectionSort = ({
       // inner loop through array to find smallest value
       setCurrentIndex([i]);
       for (let j = i + 1; j < arr.length; j++) {
-        if (stop.current) return setIsSorting(false);
+        await pause();
 
         setTestIndex([j]);
         // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value
@@ -55,7 +57,10 @@ const SelectionSort = ({
   return (
     <div>
       <button
-        onClick={() => selectionSort(primaryArray)}
+        onClick={() => {
+          selectionSort(primaryArray);
+          setCurrentSelection('Selection Sort');
+        }}
         className="inline-block  rounded-full bg-gradient-to-r mx-1 h-full from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
         disabled={isSorting}
       >

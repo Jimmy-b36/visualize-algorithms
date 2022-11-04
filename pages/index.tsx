@@ -12,6 +12,8 @@ const Home: NextPage = () => {
   const [currentIndex, setCurrentIndex] = useState<number[]>([]);
   const [testIndex, setTestIndex] = useState<number[]>([]);
   const [arraySize, setArraySize] = useState<number>(10);
+  const [currentSelection, setCurrentSelection] = useState<string>('');
+
   const speed: sortingProps['speed'] = {
     80: [50, 5],
     60: [100, 20],
@@ -19,6 +21,7 @@ const Home: NextPage = () => {
     20: [300, 200],
     10: [300, 300],
   };
+
   const arraySizeOption: { [key: number]: string } = {
     10: '100px',
     20: '50px',
@@ -26,7 +29,25 @@ const Home: NextPage = () => {
     60: '10px',
     80: '5px',
   };
+
   const stop = useRef(false);
+  const resolvePointer = useRef<() => void>(() => {});
+
+  const pause = () => {
+    return new Promise<void>(resolve => {
+      resolvePointer.current = resolve;
+      if (stop.current) {
+        setIsSorting(false);
+      } else resolve();
+    });
+  };
+
+  const resume = () => {
+    resolvePointer.current();
+    setIsSorting(true);
+    stop.current = false;
+  };
+
   const sortProps: sortingProps = {
     setPrimaryArray,
     primaryArray,
@@ -36,6 +57,8 @@ const Home: NextPage = () => {
     isSorting,
     speed,
     stop,
+    setCurrentSelection,
+    pause,
   };
 
   // generate new array function
@@ -64,6 +87,7 @@ const Home: NextPage = () => {
     setPrimaryArray(shuffled);
     setCurrentIndex([]);
     setTestIndex([]);
+    setCurrentSelection('');
     return;
   };
 
@@ -186,17 +210,17 @@ const Home: NextPage = () => {
             disabled={isSorting}
           >
             <span className="block h-full px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
-              randomize
+              Reset
             </span>
           </button>
           <button
             className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
             onClick={() => {
-              stop.current = !stop.current;
+              stop.current ? resume() : (stop.current = !stop.current);
             }}
           >
             <span className="block h-full px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
-              stop
+              Play/Pause
             </span>
           </button>
         </div>
@@ -205,6 +229,9 @@ const Home: NextPage = () => {
         <BubbleSort {...sortProps} />
         <MergeSort {...sortProps} />
         <InsertionSort {...sortProps} />
+      </div>
+      <div className="m-2 text-xl underline bold">
+        Current selection: {currentSelection}
       </div>
       <div className="flex flex-row items-end justify-center p-3 m-2 border-2 border-black h-[550px]">
         {primaryArray?.map((element: number, index: number) =>

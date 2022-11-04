@@ -8,6 +8,8 @@ const MergeSort = ({
   isSorting,
   speed,
   stop,
+  setCurrentSelection,
+  pause,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -25,7 +27,7 @@ const MergeSort = ({
 
     for (let size = 1; size < n; size *= 2) {
       for (let leftStart = 0; leftStart < n; leftStart += 2 * size) {
-        if (stop.current) return setIsSorting(false);
+        await pause();
         //Get the two sub arrays
         let left = leftStart;
         let right = Math.min(left + size, n);
@@ -91,7 +93,10 @@ const MergeSort = ({
   return (
     <div>
       <button
-        onClick={() => mergeSort(primaryArray)}
+        onClick={() => {
+          mergeSort(primaryArray);
+          setCurrentSelection('Merge Sort');
+        }}
         className="inline-block  rounded-full bg-gradient-to-r mx-1 h-full from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
         disabled={isSorting}
       >

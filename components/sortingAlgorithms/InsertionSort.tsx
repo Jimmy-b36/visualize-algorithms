@@ -8,6 +8,8 @@ const InsertionSort = ({
   isSorting,
   speed,
   stop,
+  setCurrentSelection,
+  pause,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -23,7 +25,7 @@ const InsertionSort = ({
     for (let i = 0; i < arr.length; i++) {
       await timeout(speed[primaryArray.length][0]);
       for (let j = i; j > 0; j--) {
-        if (stop.current) return setIsSorting(false);
+        await pause();
         setCurrentIndex([j]);
         setTestIndex([j - 1]);
 
@@ -51,7 +53,10 @@ const InsertionSort = ({
   return (
     <div>
       <button
-        onClick={() => insertionSort(primaryArray)}
+        onClick={() => {
+          insertionSort(primaryArray);
+          setCurrentSelection('Insertion Sort');
+        }}
         className="inline-block  rounded-full bg-gradient-to-r h-full from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
         disabled={isSorting}
       >
