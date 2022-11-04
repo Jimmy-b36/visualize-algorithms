@@ -1,5 +1,4 @@
 import { sortingProps } from '../../types';
-import { useEffect, useRef, useState } from 'react';
 
 const SelectionSort = ({
   primaryArray,
@@ -13,7 +12,6 @@ const SelectionSort = ({
   setCurrentSelection,
   pause,
 }: sortingProps) => {
-  // timeout function for merge sort
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };

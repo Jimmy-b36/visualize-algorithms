@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { sortingProps } from '../../types';
 
 const BubbleSort = ({
@@ -14,7 +12,6 @@ const BubbleSort = ({
   setCurrentSelection,
   pause,
 }: sortingProps) => {
-  // timeout function for merge sort
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };

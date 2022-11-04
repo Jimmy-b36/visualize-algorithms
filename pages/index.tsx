@@ -14,6 +14,7 @@ const Home: NextPage = () => {
   const [arraySize, setArraySize] = useState<number>(10);
   const [currentSelection, setCurrentSelection] = useState<string>('');
 
+  //speed of sorting algorithms
   const speed: sortingProps['speed'] = {
     80: [50, 5],
     60: [100, 20],
@@ -22,6 +23,7 @@ const Home: NextPage = () => {
     10: [300, 300],
   };
 
+  //size of bars depending on array size
   const arraySizeOption: { [key: number]: string } = {
     10: '100px',
     20: '50px',
@@ -74,11 +76,8 @@ const Home: NextPage = () => {
   const shuffleArray = (array: number[]) => {
     for (let i = array.length - 1; i > 0; i--) {
       let j = Math.floor(Math.random() * (i + 1));
-      let temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
+      [array[i], array[j]] = [array[j], array[i]];
     }
-
     return array;
   };
 

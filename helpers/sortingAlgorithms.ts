@@ -133,6 +133,4 @@ const shuffleArray = (arr: number[]) => {
   return arr;
 };
 
-// console.log('mergeSort -> ', mergeSort(data));
-
 export { mergeSort, selectionSort, bubbleSort, insertionSort };
