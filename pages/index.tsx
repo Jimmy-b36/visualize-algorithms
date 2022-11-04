@@ -199,27 +199,35 @@ const Home: NextPage = () => {
           currentIndex?.includes(index) ? (
             <div
               key={index}
-              className={`m-1 text-center border border-black bg-green-500 `}
+              className={`${
+                arraySize < 20 ? 'mx-3' : 'mx-1'
+              }  flex justify-center my-1 items-end border border-black bg-green-500  ${
+                !isSorting ? 'animate-bounce' : null
+              }`}
               style={{
                 height: `${element}px`,
                 width: arraySizeOption[arraySize],
               }}
             >
-              {arraySize > 40 ? element : null}
+              {arraySize < 40 ? element : null}
             </div>
           ) : testIndex?.includes(index) ? (
             <div
               key={index}
-              className={`m-1 text-center border border-black bg-red-600 `}
+              className={`${
+                arraySize < 20 ? 'mx-5' : 'mx-1'
+              } flex justify-center my-1 items-end border border-black bg-red-600 `}
               style={{
                 height: `${element}px`,
                 width: arraySizeOption[arraySize],
               }}
-            ></div>
+            >
+              {arraySize < 40 ? element : null}
+            </div>
           ) : (
             <div
               key={index}
-              className={`m-1 text-center flex justify-center items-end border border-black bg-slate-300 `}
+              className={`m-1  flex justify-center items-end border border-black bg-slate-300 `}
               style={{
                 height: `${element}px`,
                 width: arraySizeOption[arraySize],
