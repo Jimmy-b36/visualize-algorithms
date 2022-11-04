@@ -248,7 +248,6 @@ const Home: NextPage = () => {
           )
         )}
       </div>
-      <div>Hello this is a div</div>
     </div>
   );
 };
