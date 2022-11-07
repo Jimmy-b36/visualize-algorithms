@@ -6,7 +6,8 @@ export interface sortingProps {
   setTestIndex: Dispatch<SetStateAction<number[]>>;
   isSorting: boolean;
   speed: { [key: number]: number[] };
-  stop: MutableRefObject<boolean>;
+  pauseRef: MutableRefObject<boolean>;
   setCurrentSelection: Dispatch<SetStateAction<string>>;
   pause: () => Promise<void>;
+  stop: MutableRefObject<boolean>;
 }

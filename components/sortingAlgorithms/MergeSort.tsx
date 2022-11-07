@@ -7,9 +7,10 @@ const MergeSort = ({
   setCurrentIndex,
   isSorting,
   speed,
-  stop,
+  pauseRef,
   setCurrentSelection,
   pause,
+  stop,
 }: sortingProps) => {
   // timeout function for merge sort
   const timeout = (ms: number) => {
@@ -19,6 +20,7 @@ const MergeSort = ({
   // Iterative merge sort
   const mergeSort = async (arr: number[]) => {
     stop.current = false;
+    pauseRef.current = false;
     setIsSorting(true);
     //Create two arrays for sorting
     let sorted: number[] = [...arr];
@@ -28,6 +30,7 @@ const MergeSort = ({
     for (let size = 1; size < n; size *= 2) {
       for (let leftStart = 0; leftStart < n; leftStart += 2 * size) {
         await pause();
+        if (stop.current === true) return;
         //Get the two sub arrays
         let left = leftStart;
         let right = Math.min(left + size, n);
@@ -58,9 +61,9 @@ const MergeSort = ({
     sorted: number[],
     buffer: number[]
   ) => {
-    const arrRange = (start: number, stop: number, step: number) =>
+    const arrRange = (start: number, pauseRef: number, step: number) =>
       Array.from(
-        { length: (stop - start) / step + 1 },
+        { length: (pauseRef - start) / step + 1 },
         (_, i) => start + i * step
       );
 

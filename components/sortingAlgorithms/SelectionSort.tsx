@@ -8,9 +8,10 @@ const SelectionSort = ({
   setTestIndex,
   isSorting,
   speed,
-  stop,
+  pauseRef,
   setCurrentSelection,
   pause,
+  stop,
 }: sortingProps) => {
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -19,6 +20,7 @@ const SelectionSort = ({
   // selectionSort
   const selectionSort = async (arr: number[]) => {
     stop.current = false;
+    pauseRef.current = false;
     setIsSorting(true);
 
     let newArr = [...arr];
@@ -29,6 +31,7 @@ const SelectionSort = ({
       setCurrentIndex([i]);
       for (let j = i + 1; j < arr.length; j++) {
         await pause();
+        if (stop.current === true) return;
 
         setTestIndex([j]);
         // if arr[j] is smaller than arr[i] swap them, arr[i] is now the smallest value

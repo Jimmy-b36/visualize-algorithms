@@ -1,4 +1,5 @@
 import { sortingProps } from '../../types';
+import { useRef } from 'react';
 
 const BubbleSort = ({
   primaryArray,
@@ -8,9 +9,10 @@ const BubbleSort = ({
   setTestIndex,
   isSorting,
   speed,
-  stop,
+  pauseRef,
   setCurrentSelection,
   pause,
+  stop,
 }: sortingProps) => {
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -19,6 +21,7 @@ const BubbleSort = ({
   //bubbleSort
   const bubbleSort = async (arr: number[]) => {
     stop.current = false;
+    pauseRef.current = false;
     setIsSorting(true);
     setCurrentSelection('Bubble Sort');
     let newArr = [...arr];
@@ -32,6 +35,7 @@ const BubbleSort = ({
       //loop through array again testing currentValue against next value in array
       for (let j = 0; j < newArr.length; j++) {
         await pause();
+        if (stop.current === true) return;
         setTestIndex([j + 1]);
         setCurrentIndex([j]);
 

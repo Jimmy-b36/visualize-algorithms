@@ -7,16 +7,19 @@ const InsertionSort = ({
   setTestIndex,
   isSorting,
   speed,
-  stop,
+  pauseRef,
   setCurrentSelection,
   pause,
+  stop,
 }: sortingProps) => {
   const timeout = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
+
   // insertionSort
   const insertionSort = async (arr: number[]) => {
     stop.current = false;
+    pauseRef.current = false;
     setIsSorting(true);
 
     let newArr = [...arr];
@@ -25,6 +28,8 @@ const InsertionSort = ({
       await timeout(speed[primaryArray.length][0]);
       for (let j = i; j > 0; j--) {
         await pause();
+        if (stop.current === true) return;
+
         setCurrentIndex([j]);
         setTestIndex([j - 1]);
 
