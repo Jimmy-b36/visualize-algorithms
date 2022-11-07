@@ -5,6 +5,7 @@ import BubbleSort from '../components/sortingAlgorithms/BubbleSort';
 import MergeSort from '../components/sortingAlgorithms/MergeSort';
 import InsertionSort from '../components/sortingAlgorithms/InsertionSort';
 import { sortingProps } from '../types';
+import { MdLoop, MdPlayArrow, MdPause } from 'react-icons/md';
 
 const Home: NextPage = () => {
   const [primaryArray, setPrimaryArray] = useState<number[]>([]);
@@ -32,13 +33,14 @@ const Home: NextPage = () => {
     80: '5px',
   };
 
+  const pauseRef = useRef(false);
   const stop = useRef(false);
   const resolvePointer = useRef<() => void>(() => {});
 
   const pause = () => {
     return new Promise<void>(resolve => {
       resolvePointer.current = resolve;
-      if (stop.current) {
+      if (pauseRef.current) {
         setIsSorting(false);
       } else resolve();
     });
@@ -46,8 +48,9 @@ const Home: NextPage = () => {
 
   const resume = () => {
     resolvePointer.current();
+
     setIsSorting(true);
-    stop.current = false;
+    pauseRef.current = false;
   };
 
   const sortProps: sortingProps = {
@@ -58,9 +61,10 @@ const Home: NextPage = () => {
     setTestIndex,
     isSorting,
     speed,
-    stop,
+    pauseRef,
     setCurrentSelection,
     pause,
+    stop,
   };
 
   // generate new array function
@@ -96,10 +100,15 @@ const Home: NextPage = () => {
     setPrimaryArray(generatedArray);
     setCurrentIndex([]);
     setTestIndex([]);
+    stop.current = true;
   }, [arraySize]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
+      <div className="m-2 text-xl underline bold">
+        Current selection:{' '}
+        <span className="font-bold ">{currentSelection}</span>
+      </div>
       <div className="flex flex-row">
         <div className="flex flex-row pr-2 mr-2 border-r-2 border-black">
           <div className="flex flex-col items-center justify-center">
@@ -116,7 +125,7 @@ const Home: NextPage = () => {
                   className="hidden peer"
                   onChange={() => setArraySize(10)}
                   disabled={isSorting}
-                  checked={arraySize == 10}
+                  checked={arraySize === 10}
                 />
 
                 <label
@@ -152,14 +161,14 @@ const Home: NextPage = () => {
                   name="arraySizeOption"
                   value={40}
                   id="sizeForty"
-                  className="hidden peer"
+                  className="hidden peer "
                   onChange={() => setArraySize(40)}
                   disabled={isSorting}
                 />
 
                 <label
                   htmlFor="sizeForty"
-                  className="flex items-center justify-center px-3 py-2 text-gray-900 border border-gray-100 rounded-md cursor-pointer hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white"
+                  className="items-center justify-center hidden px-3 py-2 text-gray-900 border border-gray-100 rounded-md cursor-pointer hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white lg:flex xl:flex"
                 >
                   <p className="text-sm font-medium">40</p>
                 </label>
@@ -178,7 +187,7 @@ const Home: NextPage = () => {
 
                 <label
                   htmlFor="sizeSixty"
-                  className="flex items-center justify-center px-3 py-2 text-gray-900 border border-gray-100 rounded-md cursor-pointer hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white"
+                  className="items-center justify-center hidden px-3 py-2 text-gray-900 border border-gray-100 rounded-md cursor-pointer hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white lg:flex xl:flex"
                 >
                   <p className="text-sm font-medium">60</p>
                 </label>
@@ -196,32 +205,13 @@ const Home: NextPage = () => {
 
                 <label
                   htmlFor="sizeEighty"
-                  className="flex items-center justify-center px-3 py-2 text-gray-900 border border-gray-100 rounded-md cursor-pointer hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white"
+                  className="items-center justify-center hidden px-3 py-2 text-gray-900 border border-gray-100 rounded-md cursor-pointer lg:flex xl:flex hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white"
                 >
                   <p className="text-sm font-medium">80</p>
                 </label>
               </div>
             </fieldset>
           </div>
-          <button
-            onClick={resetArray}
-            className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
-            disabled={isSorting}
-          >
-            <span className="block h-full px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
-              Reset
-            </span>
-          </button>
-          <button
-            className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
-            onClick={() => {
-              stop.current ? resume() : (stop.current = !stop.current);
-            }}
-          >
-            <span className="block h-full px-8 py-5 text-sm font-medium bg-white rounded-full hover:bg-transparent">
-              Play/Pause
-            </span>
-          </button>
         </div>
 
         <SelectionSort {...sortProps} />
@@ -229,9 +219,7 @@ const Home: NextPage = () => {
         <MergeSort {...sortProps} />
         <InsertionSort {...sortProps} />
       </div>
-      <div className="m-2 text-xl underline bold">
-        Current selection: {currentSelection}
-      </div>
+
       <div className="flex flex-row items-end justify-center p-3 m-2 border-2 border-black h-[550px]">
         {primaryArray?.map((element: number, index: number) =>
           currentIndex?.includes(index) ? (
@@ -273,6 +261,30 @@ const Home: NextPage = () => {
             </div>
           )
         )}
+      </div>
+      <div className="flex flex-row">
+        <button
+          onClick={resetArray}
+          className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+          disabled={isSorting}
+        >
+          <span className="block h-full px-8 py-5 text-2xl font-medium bg-white rounded-full hover:bg-transparent">
+            <MdLoop />
+          </span>
+        </button>
+        <button
+          className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+          onClick={() => {
+            pauseRef.current
+              ? resume()
+              : (pauseRef.current = !pauseRef.current);
+          }}
+          disabled={stop.current}
+        >
+          <span className="block h-full px-8 py-5 text-2xl font-medium bg-white rounded-full hover:bg-transparent">
+            {pauseRef.current ? <MdPlayArrow /> : <MdPause />}
+          </span>
+        </button>
       </div>
     </div>
   );
