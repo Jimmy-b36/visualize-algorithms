@@ -271,7 +271,7 @@ const Home: NextPage = () => {
               <a
                 href="https://github.com/Jimmy-b36/visualize-algorithms"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="underline"
               >
                 here
