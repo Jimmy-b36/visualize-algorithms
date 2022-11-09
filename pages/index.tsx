@@ -105,7 +105,7 @@ const Home: NextPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div className="m-2 text-xl underline bold">
+      <div className="m-1 text-xl underline bold">
         Current selection:{' '}
         <span className="font-bold ">{currentSelection}</span>
       </div>
@@ -220,7 +220,7 @@ const Home: NextPage = () => {
         <InsertionSort {...sortProps} />
       </div>
 
-      <div className="flex flex-row items-end justify-center p-3 m-2 border-2 border-black h-[550px]">
+      <div className="flex flex-row items-end justify-center p-2 mt-1 mb-1 border-2 border-black h-[520px]">
         {primaryArray?.map((element: number, index: number) =>
           currentIndex?.includes(index) ? (
             <div
@@ -251,7 +251,7 @@ const Home: NextPage = () => {
           ) : (
             <div
               key={index}
-              className={`m-1  flex justify-center items-end border border-black bg-slate-300 `}
+              className={`m-1 flex justify-center items-end border border-black bg-slate-300 `}
               style={{
                 height: `${element}px`,
                 width: arraySizeOption[arraySize],
@@ -262,29 +262,46 @@ const Home: NextPage = () => {
           )
         )}
       </div>
-      <div className="flex flex-row">
-        <button
-          onClick={resetArray}
-          className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
-          disabled={isSorting}
-        >
-          <span className="block h-full px-8 py-5 text-2xl font-medium bg-white rounded-full hover:bg-transparent">
-            <MdLoop />
-          </span>
-        </button>
-        <button
-          className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
-          onClick={() => {
-            pauseRef.current
-              ? resume()
-              : (pauseRef.current = !pauseRef.current);
-          }}
-          disabled={stop.current}
-        >
-          <span className="block h-full px-8 py-5 text-2xl font-medium bg-white rounded-full hover:bg-transparent">
-            {pauseRef.current ? <MdPlayArrow /> : <MdPause />}
-          </span>
-        </button>
+      <div className="flex flex-row w-full">
+        <div className="absolute translate-x-3">
+          <p>Made with ❤️ by James Ball.</p>
+          <p>
+            Check out the repo{' '}
+            <span>
+              <a
+                href="https://github.com/Jimmy-b36/visualize-algorithms"
+                target="_blank"
+                className="underline"
+              >
+                here
+              </a>
+            </span>
+          </p>
+        </div>
+        <div className="flex justify-center w-full ">
+          <button
+            onClick={resetArray}
+            className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+            disabled={isSorting}
+          >
+            <span className="block h-full px-8 py-5 text-2xl font-medium bg-white rounded-full hover:bg-transparent">
+              <MdLoop />
+            </span>
+          </button>
+          <button
+            className="inline-block rounded-full bg-gradient-to-r  mx-1 from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75"
+            onClick={() => {
+              pauseRef.current
+                ? resume()
+                : (pauseRef.current = !pauseRef.current);
+            }}
+            disabled={stop.current}
+          >
+            <span className="block h-full px-8 py-5 text-2xl font-medium bg-white rounded-full hover:bg-transparent">
+              {pauseRef.current ? <MdPlayArrow /> : <MdPause />}
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
