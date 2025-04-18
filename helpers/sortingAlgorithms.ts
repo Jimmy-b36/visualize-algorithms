@@ -1,88 +1,110 @@
-// * recursive merge sort:
-// const mergeSort = (arr: number[]) => {
-//   const newArr: number[] = [...arr];
-//   if (newArr.length === 1) return newArr;
-//   const mid = Math.floor(newArr.length / 2);
-//   const leftArr: number[] = mergeSort(newArr.slice(0, mid));
-//   const rightArr: number[] = mergeSort(newArr.slice(mid));
-//   return merge(leftArr, rightArr);
-// };
-
-// const merge = (leftArr: number[], rightArr: number[]) => {
-//   const sortedArr: number[] = [];
-
-//   let i = 0;
-//   let j = 0;
-//   while (i < leftArr.length && j < rightArr.length) {
-//     if (leftArr[i] < rightArr[j]) {
-//       sortedArr.push(leftArr[i++]);
-//     } else {
-//       sortedArr.push(rightArr[j++]);
-//     }
-//   }
-//   while (i < leftArr.length) sortedArr.push(leftArr[i++]);
-//   while (j < rightArr.length) sortedArr.push(rightArr[j++]);
-//   return sortedArr;
-// };
-
-// * Iterative merge sort
-const mergeSort = (arr: number[]) => {
-  //Create two arrays for sorting
-  let sorted = Array.from(arr);
-  let n = sorted.length;
-  let buffer = new Array(n);
-
-  for (let size = 1; size < n; size *= 2) {
-    for (let leftStart = 0; leftStart < n; leftStart += 2 * size) {
-      //Get the two sub arrays
-      let left = leftStart,
-        right = Math.min(left + size, n),
-        leftLimit = right,
-        rightLimit = Math.min(right + size, n);
-
-      //Merge the sub arrays
-      merge(left, right, leftLimit, rightLimit, sorted, buffer);
-    }
-
-    //Swap the sorted sub array and merge them
-    let temp = sorted;
-    sorted = buffer;
-    buffer = temp;
+function* mergeSortHelper(
+  arr: number[],
+  start: number,
+  end: number
+): Generator<number[], void, unknown> {
+  if (start >= end) {
+    return;
   }
 
-  return sorted;
-};
-const merge = (
-  left: number,
-  right: number,
-  leftLimit: number,
-  rightLimit: number,
-  sorted: number[],
-  buffer: number[]
-) => {
-  let i = left;
+  const mid = Math.floor((start + end) / 2);
 
-  //Compare the two sub arrays and merge them in the sorted order
-  while (left < leftLimit && right < rightLimit) {
-    if (sorted[left] <= sorted[right]) {
-      buffer[i++] = sorted[left++];
+  // Recursively sort the left and right halves
+  yield* mergeSortHelper(arr, start, mid);
+  yield* mergeSortHelper(arr, mid + 1, end);
+
+  // Merge the sorted halves
+  yield* mergeGenerator(arr, start, mid, end);
+}
+
+export function* mergeSort(arr: number[]): Generator<number[], void, unknown> {
+  yield arr.slice();
+  yield* mergeSortHelper(arr, 0, arr.length - 1);
+  yield arr.slice();
+}
+
+function* mergeGenerator(
+  arr: number[],
+  start: number,
+  mid: number,
+  end: number
+): Generator<number[], void, unknown> {
+  const leftArray = arr.slice(start, mid + 1);
+  const rightArray = arr.slice(mid + 1, end + 1);
+
+  let leftIndex = 0;
+  let rightIndex = 0;
+  let mergeIndex = start;
+
+  while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
+    if (leftArray[leftIndex] <= rightArray[rightIndex]) {
+      arr[mergeIndex] = leftArray[leftIndex];
+      leftIndex++;
     } else {
-      buffer[i++] = sorted[right++];
+      arr[mergeIndex] = rightArray[rightIndex];
+      rightIndex++;
+    }
+    mergeIndex++;
+    yield arr.slice(); // Yield state after placing one element
+  }
+
+  // Copy any remaining elements from the left array
+  while (leftIndex < leftArray.length) {
+    arr[mergeIndex] = leftArray[leftIndex];
+    leftIndex++;
+    mergeIndex++;
+    yield arr.slice(); // Yield state after placing remaining left element
+  }
+
+  // Copy any remaining elements from the right array
+  while (rightIndex < rightArray.length) {
+    arr[mergeIndex] = rightArray[rightIndex];
+    rightIndex++;
+    mergeIndex++;
+    yield arr.slice(); // Yield state after placing remaining right element
+  }
+}
+
+export interface BubbleSortState {
+  array: number[];
+  comparing: [number, number] | null;
+  swapped: boolean;
+}
+
+export function* bubbleSort(
+  arr: number[]
+): Generator<BubbleSortState, void, unknown> {
+  let localArr = arr.slice(); // Work on a copy
+  yield { array: localArr.slice(), comparing: null, swapped: false }; // Initial state
+
+  let swappedOccurred;
+  for (let i = 0; i < localArr.length; i++) {
+    swappedOccurred = false;
+    for (let j = 0; j < localArr.length - 1 - i; j++) {
+      // Yield state *before* potential swap, highlighting comparison
+      yield { array: localArr.slice(), comparing: [j, j + 1], swapped: false };
+
+      if (localArr[j] > localArr[j + 1]) {
+        [localArr[j], localArr[j + 1]] = [localArr[j + 1], localArr[j]];
+        swappedOccurred = true;
+        // Yield state *after* swap, highlighting the same indices
+        yield { array: localArr.slice(), comparing: [j, j + 1], swapped: true };
+      }
+    }
+
+    if (!swappedOccurred) {
+      break;
     }
   }
+  // Yield final state, clear highlights
+  yield { array: localArr.slice(), comparing: null, swapped: false };
+}
 
-  //If there are elements in the left sub arrray then add it to the result
-  while (left < leftLimit) {
-    buffer[i++] = sorted[left++];
-  }
-
-  //If there are elements in the right sub array then add it to the result
-  while (right < rightLimit) {
-    buffer[i++] = sorted[right++];
-  }
-};
-
-const selectionSort = (arr: number[]) => {
+// Selection Sort Generator
+export function* selectionSort(
+  arr: number[]
+): Generator<number[], void, unknown> {
+  yield arr.slice();
   for (let i = 0; i < arr.length - 1; i++) {
     let minIdx = i;
     for (let j = i + 1; j < arr.length; j++) {
@@ -90,47 +112,43 @@ const selectionSort = (arr: number[]) => {
         minIdx = j;
       }
     }
-    [arr[minIdx], arr[i]] = [arr[i], arr[minIdx]];
-  }
-  return arr;
-};
-
-const bubbleSort = (arr: number[]) => {
-  arr = shuffleArray(arr);
-  for (let i = 0; i < arr.length; i++) {
-    //loop through array again testing currentValue against next value in array
-    for (let j = 0; j < arr.length; j++) {
-      //if the next value is bigger set the current value to the bigger value
-      if (arr[j] > arr[j + 1]) {
-        //swap values as we go through the array
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-      }
+    if (minIdx !== i) {
+      // Only swap if minIdx changed
+      [arr[minIdx], arr[i]] = [arr[i], arr[minIdx]];
+      yield arr.slice(); // Yield state after swap
     }
   }
-  return arr;
-};
+  yield arr.slice(); // Yield final state
+}
 
-const insertionSort: (arr: number[]) => number[] = (arr: number[]) => {
-  arr = shuffleArray(arr);
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = i; j > 0; j--) {
-      if (arr[j] < arr[j - 1]) {
-        [arr[j], arr[j - 1]] = [arr[j - 1], arr[j]];
-      }
+// Insertion Sort Generator
+export function* insertionSort(
+  arr: number[]
+): Generator<number[], void, unknown> {
+  yield arr.slice();
+  for (let i = 1; i < arr.length; i++) {
+    let current = arr[i];
+    let j = i - 1;
+    let shifted = false;
+    while (j >= 0 && arr[j] > current) {
+      arr[j + 1] = arr[j];
+      j--;
+      shifted = true;
+      yield arr.slice();
+    }
+    if (shifted) {
+      arr[j + 1] = current;
+      yield arr.slice();
     }
   }
-  return arr;
-};
+  yield arr.slice();
+}
 
 const shuffleArray = (arr: number[]) => {
   for (let i = arr.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
 
   return arr;
 };
-
-export { mergeSort, selectionSort, bubbleSort, insertionSort };
