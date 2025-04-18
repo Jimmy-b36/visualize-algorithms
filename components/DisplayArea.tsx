@@ -12,7 +12,7 @@ const DisplayArea = ({
   arraySizeOptions,
 }: DisplayAreaProps) => {
   return (
-    <div className="flex flex-row items-end justify-center p-2 mt-1 mb-1 border-2 border-black h-[520px]">
+    <div className="flex flex-row items-end justify-center p-2 mt-1 mb-1 border-2 border-black rounded-lg shadow-lg bg-white w-full max-w-[1200px] mx-auto min-h-[540px]">
       {state.array?.map((element: number, index: number) => {
         let barColor = 'bg-blue-500'; // Default color
         if (state.comparing?.includes(index)) {

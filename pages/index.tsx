@@ -34,20 +34,12 @@ const Home: NextPage = () => {
   const [history, setHistory] = useState<SortState[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
-  const speed: sortingProps['speed'] = {
-    10: [800, 400],
-    20: [400, 200],
-    40: [200, 100],
-    60: [150, 40],
-    80: [150, 10],
-  };
-
   const arraySizeOptions: { [key: number]: string } = {
-    10: '40px',
-    20: '20px',
-    40: '10px',
-    60: '6px',
-    80: '4px',
+    10: '400px',
+    20: '200px',
+    40: '100px',
+    60: '60px',
+    80: '40px',
   };
 
   const generateArray = (size: number = arraySize) => {
@@ -65,20 +57,24 @@ const Home: NextPage = () => {
     setCurrentSelection(algorithmName);
     setHistory([]);
     setHistoryIndex(-1);
+    pausePlaying();
+
+    const newShuffledArray = shuffleArray(generateArray(arraySize));
+    setPrimaryArray(newShuffledArray);
 
     let generator: Generator<SortState, void, unknown>;
     switch (algorithmName) {
       case 'Bubble Sort':
-        generator = bubbleSort(primaryArray);
+        generator = bubbleSort(newShuffledArray);
         break;
       case 'Merge Sort':
-        generator = mergeSort(primaryArray);
+        generator = mergeSort(newShuffledArray);
         break;
       case 'Selection Sort':
-        generator = selectionSort(primaryArray);
+        generator = selectionSort(newShuffledArray);
         break;
       case 'Insertion Sort':
-        generator = insertionSort(primaryArray);
+        generator = insertionSort(newShuffledArray);
         break;
       default:
         console.error('Unknown algorithm:', algorithmName);
@@ -118,15 +114,13 @@ const Home: NextPage = () => {
         swapped: false,
       };
     }
-    return history[historyIndex];
+    const state = history[historyIndex];
+    return state;
   }, [history, historyIndex, primaryArray]);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState<number>(400);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const autoPlayDelay = useMemo(() => {
-    return speed[arraySize]?.[1] ?? 100;
-  }, [arraySize, speed]);
 
   const startPlaying = () => {
     setIsPlaying(true);
@@ -157,7 +151,7 @@ const Home: NextPage = () => {
     if (isPlaying && historyIndex < history.length - 1) {
       intervalRef.current = setTimeout(() => {
         goToNextStep();
-      }, autoPlayDelay);
+      }, playbackSpeed);
     } else if (isPlaying && historyIndex >= history.length - 1) {
       setIsPlaying(false);
     }
@@ -167,11 +161,12 @@ const Home: NextPage = () => {
         clearTimeout(intervalRef.current);
       }
     };
-  }, [isPlaying, historyIndex, history.length, autoPlayDelay, goToNextStep]);
+  }, [isPlaying, historyIndex, history.length, playbackSpeed, goToNextStep]);
 
   const resetArray = () => {
     const newGeneratedArray = generateArray(arraySize);
-    setPrimaryArray(newGeneratedArray);
+    const shuffledArray = shuffleArray(newGeneratedArray);
+    setPrimaryArray(shuffledArray);
     pausePlaying();
     setCurrentSelection('');
     setHistory([]);
@@ -179,7 +174,7 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start h-screen pt-5">
+    <div className="flex flex-col items-center justify-start min-h-screen pt-5 bg-gray-50">
       <h1 className="m-1 text-2xl font-bold underline">Algorithm Visualizer</h1>
       <div className="m-1 text-xl">
         {isGeneratingHistory
@@ -206,7 +201,22 @@ const Home: NextPage = () => {
         resetArray={resetArray}
         goToPreviousStep={goToPreviousStep}
         goToNextStep={goToNextStep}
+        playbackSpeed={playbackSpeed}
+        setPlaybackSpeed={setPlaybackSpeed}
       />
+      <footer className="w-full mt-8 mb-2 flex flex-col items-center">
+        <div className="text-gray-600 text-sm">
+          Made with <span className="text-red-500">❤️</span> by James Ball{' '}
+          <a
+            href="https://github.com/Jimmy-b36/visualize-algorithms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-blue-600 ml-1"
+          >
+            [git repo]
+          </a>
+        </div>
+      </footer>
     </div>
   );
 };
